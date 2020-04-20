@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <link rel="icon" type="image/png" href="/public/favicon.png">
+    <title>This page is made in rust at 100%</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="index.min.css">
+    <style>
+        img {
+            transition: filter 0.4s linear;
+        }
+        img:hover {
+            filter: grayscale(1)
+        }
+    </style>
+</head>
+<body>
+    <!-- The image has no copyright, It is the mascot of Rust lang the awesome programming langage that is safe, concurrent, blazingly-fast, optimized, compiled -->
+    <!-- You sould probably take a look at src/lib.rs because all the code of the TP is here! And for the css look at index.scss not the css-->
+    <section id="app"></section>
+    <script type="module">
+        // https://rustwasm.github.io/docs/wasm-bindgen/examples/without-a-bundler.html
+        import init from '/pkg/package.js';
+        init('/pkg/package_bg.wasm');
+    </script>
+</body>
+</html>
