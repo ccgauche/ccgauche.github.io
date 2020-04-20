@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="/public/favicon.png">
     <title>This page is made in rust at 100%</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-    <link rel="stylesheet" href="index.min.css">
+    <link rel="stylesheet" href="./index.min.css">
     <style>
         img {
             transition: filter 0.4s linear;
@@ -23,8 +23,8 @@
     <section id="app"></section>
     <script type="module">
         // https://rustwasm.github.io/docs/wasm-bindgen/examples/without-a-bundler.html
-        import init from '/pkg/package.js';
-        init('/pkg/package_bg.wasm');
+        import init from './pkg/package.js';
+        init('./pkg/package_bg.wasm');
     </script>
 </body>
 </html>
