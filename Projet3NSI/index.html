@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
+        <title>UCGDDP</title>
+        <style>
+            
+@font-face {
+    font-family: "AmeracanKestral";
+    src: url("style/americankestrallaser1_2.ttf");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body, section {
+    height: 100%;
+    width: 100%;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    padding: 1rem 0;
+    background-color: #2f3640;
+    color: #e84118;
+    font-size: 6rem;
+    text-align: center;
+    font-family: AmeracanKestral;
+    width: 100%;
+}
+
+.page {
+    background-color: #353b48;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 20rem;
+    flex-grow: 1;
+}
+
+.games {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.game {
+    margin: 2rem;
+    border: 2px solid #dcdde1;
+    border-radius: 10px;
+    background-color: #dcdde1;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: flex;
+    flex-direction: column;
+    width: 8rem;
+    height: 11rem;
+    transition: 0.3s;
+}
+
+.game:hover {
+    width: 10rem;
+    height: 13rem;
+    cursor: pointer;
+}
+
+.rendu {
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+}
+
+.name {
+    padding: 0.6rem;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.2rem;
+    text-align: center;
+    color: #c23616;
+    height: 100%;
+}
+
+.info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: #2f3640;
+    padding: 2rem;
+}
+
+.info div {
+    color: #dcdde1;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+        </style>
+    </head>
+    <body>
+        <section id="#app">
+            <div class="title">
+                Ultimate crabe game Dashboard delux premium
+            </div>
+            <div class="page">
+                <div class="games">
+                    <a class="game" href="morpion.html">
+                        <img class="rendu" src="img/img_morpion.png" alt="image morpion">
+                        <div class="name">
+                            Morpion
+                        </div>
+                    </a>
+                    <a class="game" href="demineur.html">
+                        <img class="rendu" src="img/img_demineur.png" alt="image demineur">
+                        <div class="name">
+                            Démineur
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="info">
+                <div>
+                    Fait par Laurent Gaucheron et Matteo Deflour.
+                </div>
+                <div>
+                    Classe de NSI du lycée Jean Monnet.
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
