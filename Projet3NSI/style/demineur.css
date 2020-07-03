@@ -1,0 +1,99 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 100%;
+}
+
+#app {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.score {
+    margin-top: auto;
+    text-align: center;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    border: 3px;
+    border-style: inset;
+    border-color: #f0f0f0;
+    background-color: #c0c0c0;
+    font-size: 0.9rem;
+}
+
+.tableau {
+    margin: auto;
+    /*border-top: 1px solid black;*/
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.ligne {
+    /*border-left: 1px solid black;*/
+    display: flex;
+    flex-direction: row;
+}
+
+.cellule {
+    /*border-bottom: 1px solid black;
+    border-right: 1px solid black;*/
+    display: flex;
+    min-width: 30px;
+    max-width: 30px;
+    min-height: 30px;
+    max-height: 30px;
+}
+
+.cell-button {
+    flex-grow: 1;
+    border: 3px;
+    border-style: outset;
+    border-color: #f0f0f0;
+    background-color: #c0c0c0;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.cell-button:active {
+    border: 2px;
+    border-style: solid;
+    border-color: #8c8c8c;
+    background-color: #c0c0c0;
+}
+
+.cell-reveal {
+    border: 2px;
+    border-style: solid;
+    border-color: #8c8c8c;
+    background-color: #c0c0c0;
+}
+
+.cell-flag:after {
+    font-size: 1rem;
+    content: "🚩";
+}
+
+.cell-flag:active {
+    flex-grow: 1;
+    border: 3px;
+    border-style: outset;
+    border-color: #f0f0f0;
+    background-color: #c0c0c0;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.cell-mine:after {
+    content: "💣";
+}
