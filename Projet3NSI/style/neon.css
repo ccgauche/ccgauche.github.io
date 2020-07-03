@@ -1,0 +1,41 @@
+/*Neon*/
+.neon {
+    text-align: center;
+    font-size: 7em;
+    text-decoration: none;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.neon-red {
+    color: #ffbebe;
+    -webkit-animation: effet-red 1.5s ease-in-out infinite alternate;
+    -moz-animation: effet-red 1.5s ease-in-out infinite alternate;
+    animation: effet-red 1.5s ease-in-out infinite alternate;
+}
+
+.neon-blue {
+    color: #c2beff;
+    -webkit-animation: effet-blue 1.5s ease-in-out infinite alternate;
+    -moz-animation: effet-blue 1.5s ease-in-out infinite alternate;
+    animation: effet-blue 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes effet-red {
+    from {
+        text-shadow: 0 0 10px #ffbebe, 0 0 20px #ffbebe, 0 0 30px #ffbebe, 0 0 40px #fc2a2a, 0 0 70px #fc2a2a, 0 0 80px #fc2a2a, 0 0 100px #fc2a2a, 0 0 150px #fc2a2a;
+    }
+    to {
+      text-shadow: 0 0 5px #ffbebe, 0 0 10px #ffbebe, 0 0 15px #ffbebe, 0 0 20px #fc2a2a, 0 0 35px #fc2a2a, 0 0 40px #fc2a2a, 0 0 50px #fc2a2a, 0 0 75px #fc2a2a;
+    }
+}
+
+@keyframes effet-blue {
+    from {
+      text-shadow: 0 0 10px #c2beff, 0 0 20px #c2beff, 0 0 30px #c2beff, 0 0 40px #5a4eff, 0 0 70px #5a4eff, 0 0 80px #5a4eff, 0 0 100px #5a4eff, 0 0 150px #5a4eff;
+    }
+    to {
+      text-shadow: 0 0 5px #c2beff, 0 0 10px #c2beff, 0 0 15px #c2beff, 0 0 20px #5a4eff, 0 0 35px #5a4eff, 0 0 40px #5a4eff, 0 0 50px #5a4eff, 0 0 75px #5a4eff;
+    }
+}
