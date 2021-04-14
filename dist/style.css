@@ -75,6 +75,9 @@ footer {
   max-height: 60vh;
   overflow-y: auto;
 }
+.content pre > code {
+  line-height: 1.4rem;
+}
 .content blockquote {
   color: rgba(0, 0, 0, 0.5);
   padding-left: 1.5em;
