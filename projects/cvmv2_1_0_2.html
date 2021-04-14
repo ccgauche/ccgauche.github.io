@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laurent Gaucheron blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="../dist/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/css.min.js"></script>
+  </head>
+  <body> 
+    <header class="content">
+      <div class="container"><a href="../index.html">Accueil</a><a href="../about.html">À propos</a><a href="../contact.html">Me contacter</a></div>
+    </header>
+    <div class="content">
+      <div class="container">
+        <h1> CVM v2 1.0.2 maintenant en public</h1><h2> Qu'est ce que CVM</h2><p>CVM était au départ une petite machine virtuelle, ainsi qu'un compileur réalisé pour <strong>Discursif CTF</strong> un challenge de rétro-ingénierie et de hacking.Avec le temps CVM devint de plus en plus poussé, un backend vers C fut créé, puis un optimiseur de bytecode...<br><br>Aujourd'hui CVM c'est 27K lignes de code Rust, un language puissant avec des types statiques, de l'héritage, du polymorphisme, des abstractions sûres...De multiples backend, en effet, le bytecode CVM se transpile vers Python, JS, Java, C et Rust (D'autres langages sont en préparation).</p><br><h2> Les contraintes de CVM</h2><p>Le défi de CVM c'est qu'il n'existe que 9 instructions (si un compte toutes les opérations arithmétiques de base dans une seule instruction). Si on décide de compter chaque type d'opération comme une instruction il y a 18 instructions.<br>Le plus gros défi est l'absence d'allocation mémoire. En effet, CVM ne dispose d'aucune manière de stocker de la mémoire sur une pile ou une heap. Tout est statique et géré à la compilation.Cela a plusieurs conséquences: Il est impossible de faire des fonctions récursives, L'allocation d'objets qui dépassent de la taille d'un registre (256 blocs de 8 bits) est impossible sans avoir à gérer plusieurs registres.</p><br><h2> L'optimiseur</h2><p>CVM a un cycle de compilation relativement simple: </p><ul><li> Parsing</li><li> Type checking</li><li> Génération de code MIR</li><li> Optimisation de ce code</li><li> Génération de LIR ou de tout autre backend basé sur le MIR</li><li> Génération de tous les backends basé sur le LIR</li></ul><br><p>Voici une représentation textuelle du code intermédiaire CVM (MIR):</p><pre><code class="lang-ruby">v0 = 6
+v1 = 73 110 118 97 108 105 100 32 105 110 112 117 116 10
+v2 = 79
+v3 = 49
+v4 = 65 108 100 114 101 97 100 121 32 115 111 109 101 116 104 105 110 103 32 112 108 97 99 101 100 32 104 101 114 101 10
+v5 = 0
+v6 = 3
+v7 = 5
+v8 = 32 124 32
+v9 = 45 45 45 45 45 45 45 45 45 10
+v10 = 2
+v11 = 8
+v12 = 69 110 116 101 114 32 97 32 112 111 115 105 116 105 111 110 32 116 111 32 112 108 97 121 32 105 110 32 58 32
+v13 = 32
+v14 = 88
+v15 = 4
+v16 = 237
+v17 = 7
+v18 = 10
+v19 = 1
+v20 = 32 32 32 32 32 32 32 32 32
+v21 = 88
+loop {
+  v22 = v20[v10 &gt; v19]
+  v23 = v22 ~ v18
+  v24 = v8 ~ v23
+  v25 = v20[v19 &gt; v19]
+  v26 = v25 ~ v24
+  v27 = v8 ~ v26
+  v28 = v20[v5 &gt; v19]
+  v29 = v28 ~ v27
+  print v29
+  print v9
+  v30 = v20[v7 &gt; v19]
+  v31 = v30 ~ v18
+  v32 = v8 ~ v31
+  v33 = v20[v15 &gt; v19]
+  v34 = v33 ~ v32
+  v35 = v8 ~ v34
+  v36 = v20[v6 &gt; v19]
+  v37 = v36 ~ v35
+  print v37
+  print v9
+  v38 = v20[v11 &gt; v19]
+  v39 = v38 ~ v18
+  v40 = v8 ~ v39
+  v41 = v20[v17 &gt; v19]
+  v42 = v41 ~ v40
+  v43 = v8 ~ v42
+  v44 = v20[v0 &gt; v19]
+  v45 = v44 ~ v43
+  print v45
+  print v12
+  v46 = input
+  print v18
+  v47 = len v46
+  if v47 != v19 {
+    print v1
+    continue
+  }
+  v48 = fn {
+    v49 = 49
+    if v49 == v46 {
+      return v19
+    }
+    v49 = 50
+    if v49 == v46 {
+      return v19
+    }
+    v49 = 51
+    if v49 == v46 {
+      return v19
+    }
+    v49 = 52
+    if v49 == v46 {
+      return v19
+    }
+    v49 = 53
+    if v49 == v46 {
+      return v19
+    }
+    v49 = 54
+    if v49 == v46 {
+      return v19
+    }
+    v49 = 55
+    if v49 == v46 {
+      return v19
+    }
+    v49 = 56
+    if v49 == v46 {
+      return v19
+    }
+    v49 = 57
+    if v49 == v46 {
+      return v19
+    }
+    return v5
+  }
+  if v48 == v5 {
+    print v1
+    continue
+  }
+  v50 = v46 - v3
+  v51 = fn {
+    v52 = v20[v50 &gt; v19]
+    if v52 != v13 {
+      return v19
+    }
+    v53 = len v21
+    v54 = v50 + v53
+    v55 = len v20
+    v56 = v20[v54 &gt; v55]
+    v57 = v21 ~ v56
+    v58 = v50 - v5
+    v59 = v20[v5 &gt; v58]
+    v60 = v59 ~ v57
+    v20 = v60
+    v61 = fn {
+      v62 = 0
+      loop {
+        if v62 == v6 {
+          break
+        }
+        v63 = v62
+        v62 = v62 + v19
+        v64 = v60[v63 &gt; v19]
+        if v64 == v13 {
+          continue
+        }
+        v65 = v63 + v0
+        v66 = v60[v65 &gt; v19]
+        v67 = v63 + v6
+        v68 = v60[v67 &gt; v19]
+        v69 = v68 + v66
+        v70 = v60[v63 &gt; v19]
+        v71 = v70 + v69
+        if v71 == v11 {
+          return v14
+        }
+        if v71 == v16 {
+          return v2
+        }
+        v72 = v63 * v6
+        v73 = v72 + v10
+        v74 = v60[v73 &gt; v19]
+        v75 = v72 + v19
+        v76 = v60[v75 &gt; v19]
+        v77 = v76 + v74
+        v78 = v60[v72 &gt; v19]
+        v79 = v78 + v77
+        if v79 == v11 {
+          return v14
+        }
+        if v79 == v16 {
+          return v2
+        }
+      }
+      v80 = v60[v11 &gt; v19]
+      v81 = v60[v15 &gt; v19]
+      v82 = v81 + v80
+      v83 = v60[v5 &gt; v19]
+      v84 = v83 + v82
+      if v84 == v11 {
+        return v14
+      }
+      if v84 == v16 {
+        return v2
+      }
+      v85 = v60[v0 &gt; v19]
+      v86 = v60[v15 &gt; v19]
+      v87 = v86 + v85
+      v88 = v60[v10 &gt; v19]
+      v89 = v88 + v87
+      if v89 == v11 {
+        return v14
+      }
+      if v89 == v16 {
+        return v2
+      }
+      return v13
+    }
+    if v61 != v13 {
+      v90 = 32 104 97 115 32 119 111 110 33 10
+      v91 = v61 ~ v90
+      print v91
+      end
+    }
+    v92 = fn {
+      v93 = len v60
+      v94 = 0
+      loop {
+        if v93 == v94 {
+          break
+        }
+        v95 = v60[v94 &gt; v19]
+        v94 = v94 + v19
+        if v95 == v13 {
+          return v19
+        }
+      }
+      return v5
+    }
+    if v92 == v5 {
+      v96 = 78 111 98 111 100 121 32 119 111 110 33 10
+      print v96
+      end
+    }
+    return v5
+  }
+  if v51 == v19 {
+    print v4
+    continue
+  }
+  if v21 == v2 {
+    v21 = 88
+  } else {
+    v21 = 79
+  }
+}
+end
+</code></pre><p>Ci-dessous le code d'un morpion en CVM.</p><pre><code class="lang-rust">use "../lib/std";
+
+type Table = 9 {
+    ref empty = "         ";
+
+    fn display() {
+        print(self[0]~" | "~self[1]~" | "~self[2]~10);
+        print("---------"~10);
+        print(self[3]~" | "~self[4]~" | "~self[5]~10);
+        print("---------"~10);
+        print(self[6]~" | "~self[7]~" | "~self[8]~10);
+    }
+
+    fn won() -&gt; Char {
+        for Byte i in 0..3 {
+            if self[i] == " " =&gt; continue;
+            Byte added = self[i] + self[i + 3] + self[i + 6];
+            if added == "X" * 3 =&gt; return "X";
+            if added == "O" * 3 =&gt; return "O";
+            Byte times3 = i * 3;
+            Byte added1 = self[times3] + self[times3 + 1] + self[times3 + 2];
+            if added1 == "X" * 3 =&gt; return "X";
+            if added1 == "O" * 3 =&gt; return "O";
+        }
+        Byte added2 = self[0] + self[4] + self[8];
+        if added2 == "X" * 3 =&gt; return "X";
+        if added2 == "O" * 3 =&gt; return "O";
+        Byte added3 = self[2] + self[4] + self[6];
+        if added3 == "X" * 3 =&gt; return "X";
+        if added3 == "O" * 3 =&gt; return "O";
+        return " "
+    }
+
+    fn update(Byte current,Byte number) -&gt; Boolean {
+        if self[number] != " " =&gt; return Boolean.true;
+        self[number] = current;
+        Char char = self.won();
+        if char != " " {
+            print(char~" has won!"~10);
+            exit();
+        }
+        if !(self.contains(" ")) {
+            print("Nobody won!"~10);
+            exit();
+        }
+        return Boolean.false;
+    }
+}
+
+fn main() {
+    Table table = Table.empty; // This copies Table.empty into a new var named table
+    Char current = "X";
+    loop {
+        table.display(); // This will display the current grid
+        print("Enter a position to play in : ");
+        Bytes a = input(); // We get the input
+        print(10); // This print new line (\n)
+
+        if a.len() != 1 { // We check if the given input is of size 1
+            print("Invalid input"~10);
+            continue;
+        }
+
+        Byte a = a as Byte; // Now that we know that a as for length 1 we can transmute memory safely
+
+        // We check if `a` is a number
+        if !("123456789".contains(a)) {
+            print("Invalid input"~10);
+            continue;
+        }
+
+        // We update the grid with the input and if the case is already taken we print a message and continue the loop
+        if table.update(current as Byte, a - "1" ) { // We set the "1" as 0
+            print("Aldready something placed here"~10);
+            continue;
+        }
+
+        if current == "O" =&gt; current = "X";
+        else =&gt; current = "O";
+    }
+}
+</code></pre><br><p>Le code que vous avez pu voir avant est intimidant, pourtant il était déja optimisé et simplifié!<br>Pour comprendre la puissance de l'optimiseur, je vous propose de voir ce que donne le programme suivant optimisé et non-optimisé</p><pre><code class="lang-rust">use "../lib/std";
+
+fn main() {
+    // On demande le nom de l'utilisateur
+    print("Enter your name: ");
+    // On demande une entrée mais comme celle ci est de type Bytes par défaut on la cast
+    // en String grâce au mot clé `as` ensuite on retire les espaces devant et derrière.
+    String a = (input() as String).trim();
+    // On teste si `a` equivaut à `Laurent` au quel cas on écrit `Hello Boss\n`
+    if a == "Laurent" =&gt; print("Hello Boss"~10);
+    else =&gt; print("Hello "~a~10);
+    // Comme vous pouvez le voir les blocs de code en CVM peuvent s'il ne contiennent qu'une instruction
+    // s'écrire avec un =&gt;
+}
+</code></pre><br><p>Une fois optimisé voilà le résultat:</p><pre><code class="lang-ruby">v0 = 76 97 117 114 101 110 116
+v1 = 10
+v2 = 0
+v3 = 32
+v4 = 1
+v5 = 69 110 116 101 114 32 121 111 117 114 32 110 97 109 101 58 32
+v6 = 72 101 108 108 111 32
+print v5
+v7 = input
+loop {
+  v8 = v7[v2 &gt; v4]
+  if v8 != v3 {
+    loop {
+      v9 = len v7
+      v10 = v9 - v4
+      v11 = v7[v10 &gt; v4]
+      if v11 != v3 {
+        if v7 == v0 {
+          v12 = 72 101 108 108 111 32 66 111 115 115 10
+          print v12
+        } else {
+          v13 = v7 ~ v1
+          v14 = v6 ~ v13
+          print v14
+        }
+        end
+      }
+      v15 = len v7
+      v16 = v15 - v4
+      v17 = v16 - v2
+      v18 = v7[v2 &gt; v17]
+      v7 = v18
+    }
+  }
+  v19 = len v7
+  v20 = v19 - v4
+  v7 = v7[v4 &gt; v20]
+}
+</code></pre><br><p>Mais quand il n'est pas optimisé c'est autre chose!</p><pre><code class="lang-ruby">v1 = fn {
+  v2 = 69 110 116 101 114 32 121 111 117 114 32 110 97 109 101 58 32
+  v3 = fn {
+    print v2
+  }
+  v5 = fn {
+    v6 = input
+    return v6
+  }
+  v7 = fn {
+    loop {
+      v8 = 32
+      v9 = 0
+      v10 = fn {
+        v11 = fn {
+          v12 = 1
+          v13 = fn {
+            v14 = v5[v9 &gt; v12]
+            return v14
+          }
+          return v13
+        }
+        return v11
+      }
+      v15 = fn {
+        if v10 == v8 {
+          v16 = 0
+        } else {
+          v16 = 1
+        }
+        return v16
+      }
+      v17 = 1
+      if v15 == v17 {
+        break
+      }
+      v18 = 1
+      v19 = fn {
+        v20 = len v5
+        return v20
+      }
+      v21 = fn {
+        v22 = fn {
+          v23 = fn {
+            v24 = fn {
+              v25 = fn {
+                v26 = v19 - v18
+                return v26
+              }
+              return v25
+            }
+            return v24
+          }
+          v27 = fn {
+            v28 = v5[v18 &gt; v23]
+            return v28
+          }
+          return v27
+        }
+        return v22
+      }
+      v5 = v21
+    }
+    loop {
+      v29 = 32
+      v30 = 1
+      v31 = fn {
+        v32 = len v5
+        return v32
+      }
+      v33 = fn {
+        v34 = fn {
+          v35 = fn {
+            v36 = v31 - v30
+            return v36
+          }
+          return v35
+        }
+        return v34
+      }
+      v37 = fn {
+        v38 = fn {
+          v39 = 1
+          v40 = fn {
+            v41 = v5[v33 &gt; v39]
+            return v41
+          }
+          return v40
+        }
+        return v38
+      }
+      v42 = fn {
+        if v37 == v29 {
+          v43 = 0
+        } else {
+          v43 = 1
+        }
+        return v43
+      }
+      v44 = 1
+      if v42 == v44 {
+        break
+      }
+      v45 = 0
+      v46 = 1
+      v47 = fn {
+        v48 = len v5
+        return v48
+      }
+      v49 = fn {
+        v50 = fn {
+          v51 = fn {
+            v52 = v47 - v46
+            return v52
+          }
+          return v51
+        }
+        return v50
+      }
+      v53 = fn {
+        v54 = fn {
+          v55 = fn {
+            v56 = fn {
+              v57 = fn {
+                v58 = v49 - v45
+                return v58
+              }
+              return v57
+            }
+            return v56
+          }
+          v59 = fn {
+            v60 = v5[v45 &gt; v55]
+            return v60
+          }
+          return v59
+        }
+        return v54
+      }
+      v5 = v53
+    }
+    return v5
+  }
+  v4 = v7
+  v61 = 76 97 117 114 101 110 116
+  v62 = fn {
+    if v4 == v61 {
+      v63 = 1
+    } else {
+      v63 = 0
+    }
+    return v63
+  }
+  v64 = 1
+  if v62 == v64 {
+    v65 = 10
+    v66 = 72 101 108 108 111 32 66 111 115 115
+    v67 = fn {
+      v68 = fn {
+        v69 = fn {
+          v70 = v66 ~ v65
+          return v70
+        }
+        return v69
+      }
+      return v68
+    }
+    v71 = fn {
+      print v67
+    }
+  } else {
+    v72 = 10
+    v73 = fn {
+      v74 = fn {
+        v75 = fn {
+          v76 = v4 ~ v72
+          return v76
+        }
+        return v75
+      }
+      return v74
+    }
+    v77 = 72 101 108 108 111 32
+    v78 = fn {
+      v79 = fn {
+        v80 = fn {
+          v81 = v77 ~ v73
+          return v81
+        }
+        return v80
+      }
+      return v79
+    }
+    v82 = fn {
+      print v78
+    }
+  }
+}
+end
+</code></pre><br><p>Comme vous avez pu le constaté l'optimiseur est très efficace!<br>Pour atteindre cette efficacité l'optimisation est découpé en passes qui s'éxécutent jusqu'à qu'aucune modification n'est été apporté au code par la dernière passe. Chaque passe va executer a son tour les optimisations suivants: </p><ul><li> l'élision de code statique</li><li> le rassemblement d'appels consécutifs</li><li> le simplifieur de branche</li><li> le reformatteur de fonction</li><li> le nettoyeur de boucle</li><li> l'élision du code innutile</li><li> la fusion de code</li><li> le rassemblement de constante</li><li> le pré-calcul à la compilation</li><li> le nettoyage de référence</li></ul><p>Le bytecode CVM final n'ayant aucun concept de fonction ou de boucle ils sont tous remplacés par des JUMP et des MOV. Si les JUMPs ne sont pas dans le MIR c'est que c'est beaucoup plus dur d'optimiser un code utilisant des branches avec des JUMPs. En effet, la différenciation des boucles et des simples conditions est assez difficile.<br>Le code LIR généré par le programme ci dessus est celui ci:</p><pre><code class="lang-rust">l0 v0 = 0
+l1 v1 = 72 101 108 108 111 32
+l2 v2 = 69 110 116 101 114 32 121 111 117 114 32 110 97 109 101 58 32
+l3 v3 = 32
+l4 v4 = 1
+l5 v5 = 10
+l6 v6 = 76 97 117 114 101 110 116
+l7 print v2
+l8 v7 = input
+l9 'loop_start1
+l10 v8 = v7[v0 &gt; v4]
+l11 if 8 != 3
+l12 goto 'if_end2
+l13 'loop_start3
+l14 v9 = len v7
+l15 v10 = v9 - v4
+l16 v11 = v7[v10 &gt; v4]
+l17 if 11 != 3
+l18 goto 'if_end4
+l19 if 7 == 6
+l20 goto 'if_else5
+l21 v12 = 72 101 108 108 111 32 66 111 115 115 10
+l22 print v12
+l23 goto 'if_end5
+l24 'if_else5
+l25 v13 = v7 ~ v5
+l26 v14 = v1 ~ v13
+l27 print v14
+l28 'if_end5
+l29 end
+l30 'if_end4
+l31 v15 = len v7
+l32 v16 = v15 - v4
+l33 v17 = v16 - v0
+l34 v18 = v7[v0 &gt; v17]
+l35 v7 = v18
+l36 goto 'loop_start3
+l37 'loop_end3
+l38 'if_end2
+l39 v19 = len v7
+l40 v20 = v19 - v4
+l41 v7 = v7[v4 &gt; v20]
+l42 goto 'loop_start1
+l43 'loop_end1
+</code></pre><br><p>Cet ASM est très compact une fois en format executable CVM, il fait, en effet, 164 octets.</p><br><h2> La documentation CVM</h2><p>CVM dipose d'un typage statique ce qui permet une bonne analyse du code et une auto génération des documentations. Voici une capture d'écran de la documentation! <img src="https://i.imgur.com/jk6LJnX.png" label="Image de la documentation"><br>Cette documentation est auto-générée à la compilation si l'export <code>Doc</code> est activé</p><br><h2> Les exports</h2><br><p>CVM peut se compiler pour diverses plateformes. Par exemple le code ci dessus, donne en C:</p><pre><code class="lang-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define MIN(a, b) ((a) &lt; (b) ? (a) : (b))
+
+void main() {
+    unsigned char v14[257];
+    unsigned char v9[257];
+    unsigned char v1[257];
+    unsigned char v8[257];
+    unsigned char v7[257];
+    unsigned char v4[257];
+    unsigned char v15[257];
+    unsigned char v16[257];
+    unsigned char v11[257];
+    unsigned char v17[257];
+    unsigned char v0[257];
+    unsigned char v5[257];
+    unsigned char v18[257];
+    unsigned char v3[257];
+    unsigned char v20[257];
+    unsigned char v2[257];
+    unsigned char v12[257];
+    unsigned char v19[257];
+    unsigned char v13[257];
+    unsigned char v10[257];
+    unsigned char v6[257];
+    memcpy(v0, (char[2]){1, 0}, 2);
+    memcpy(v1, (char[7]){6, 72, 101, 108, 108, 111, 32}, 7);
+    memcpy(v2, (char[18]){17, 69, 110, 116, 101, 114, 32, 121, 111, 117, 114, 32, 110, 97, 109, 101, 58, 32}, 18);
+    memcpy(v3, (char[2]){1, 32}, 2);
+    memcpy(v4, (char[2]){1, 1}, 2);
+    memcpy(v5, (char[2]){1, 10}, 2);
+    memcpy(v6, (char[8]){7, 76, 97, 117, 114, 101, 110, 116}, 8);
+    v2[v2[0] + 1] = 0;
+    printf("%s", v2 + 1);
+    fgets(v7 + 1, 255, stdin);
+    v7[0] = strlen(v7 + 1) - 1;
+    while (1) {
+        if (v0[0] != 1 || v4[0] != 1 || v0[1] &gt;= v7[0])
+            abort();
+        v8[0] = MIN(v7[0] - v0[1], v4[1]);
+        memcpy(v8 + 1, v7 + v0[1] + 1, v8[0]);
+        if (!(v8[0] == v3[0] && memcmp(v8 + 1, v3 + 1, v8[0]) == 0)) {
+            while (1) {
+                v9[0] = 1;
+                v9[1] = v7[0];
+                v10[0] = v9[0];
+                for (unsigned char index = 0; index &lt; v9[0]; index++) {
+                    v10[index + 1] = v9[index + 1] - v4[(index % v4[0]) + 1];
+                }
+                if (v10[0] != 1 || v4[0] != 1 || v10[1] &gt;= v7[0])
+                    abort();
+                v11[0] = MIN(v7[0] - v10[1], v4[1]);
+                memcpy(v11 + 1, v7 + v10[1] + 1, v11[0]);
+                if (!(v11[0] == v3[0] && memcmp(v11 + 1, v3 + 1, v11[0]) == 0)) {
+                    if (v7[0] == v6[0] && memcmp(v7 + 1, v6 + 1, v7[0]) == 0) {
+                        memcpy(v12, (char[12]){11, 72, 101, 108, 108, 111, 32, 66, 111, 115, 115, 10}, 12);
+                        v12[v12[0] + 1] = 0;
+                        printf("%s", v12 + 1);
+                    } else {
+                        if (v7[0] + v5[0] &gt; 255)
+                            abort();
+                        v13[0] = v7[0] + v5[0];
+                        memcpy(v13 + 1, v7 + 1, v7[0]);
+                        memcpy(v13 + v7[0] + 1, v5 + 1, v5[0]);
+                        if (v1[0] + v13[0] &gt; 255)
+                            abort();
+                        v14[0] = v1[0] + v13[0];
+                        memcpy(v14 + 1, v1 + 1, v1[0]);
+                        memcpy(v14 + v1[0] + 1, v13 + 1, v13[0]);
+                        v14[v14[0] + 1] = 0;
+                        printf("%s", v14 + 1);
+                    }
+                    exit(0);
+                }
+                v15[0] = 1;
+                v15[1] = v7[0];
+                v16[0] = v15[0];
+                for (unsigned char index = 0; index &lt; v15[0]; index++) {
+                    v16[index + 1] = v15[index + 1] - v4[(index % v4[0]) + 1];
+                }
+                v17[0] = v16[0];
+                for (unsigned char index = 0; index &lt; v16[0]; index++) {
+                    v17[index + 1] = v16[index + 1] - v0[(index % v0[0]) + 1];
+                }
+                if (v0[0] != 1 || v17[0] != 1 || v0[1] &gt;= v7[0])
+                    abort();
+                v18[0] = MIN(v7[0] - v0[1], v17[1]);
+                memcpy(v18 + 1, v7 + v0[1] + 1, v18[0]);
+                memcpy(v7, v18, v18[0] + 1);
+            }
+        }
+        v19[0] = 1;
+        v19[1] = v7[0];
+        v20[0] = v19[0];
+        for (unsigned char index = 0; index &lt; v19[0]; index++) {
+            v20[index + 1] = v19[index + 1] - v4[(index % v4[0]) + 1];
+        }
+        if (v4[0] != 1 || v20[0] != 1 || v4[1] &gt;= v7[0])
+            abort();
+        v7[0] = MIN(v7[0] - v4[1], v20[1]);
+        memcpy(v7 + 1, v7 + v4[1] + 1, v7[0]);
+    }
+}
+</code></pre><p>Comme vous pouvez le voir le code C généré est assez "brut" mais le compileur le C est extrèmement bon et arrive aisément à élider la majorité des <strong>memcpy</strong>. Toutefois le code reste extrèmement illisible notament dans Ghidra où le code est tellement étrange qu'il n'arrive plus à rien inférer.<br>Ce langage a donc un potentiel dans la programmation de trojans, virus... En effet, sa mémoire étant statique, ses performances prévisibles et son code est extrèmement difficile a rétro-ingéniérer il est presque impossible pour un antivirus de le détecter. <br>D'autres backend sont selon moi plus intéréssant notamment celui en JS ou python car ils produisent un code vraiment illisible et cela forme une offuscation puissante pour des langages interprétés ou compilés à la volée comme JS ou Python.</p><br><h2> Pourquoi avoir choisi Rust</h2><p>Rust est un langage développé par Mozilla Foundation, l'organisation à but non-lucratif derrière Firefox. Ce langage a comme principes fondateurs:</p><h3> La performance</h3><p>Rust n'utilise pas de garbage collector, toute la mémoire est gérée statiquement à la compilation grace à trois principes: </p><ul><li> les lifetimes ou durée de vie</li><li> l'ownership ou propriété</li><li> le borrowing ou empreint.</li></ul><br><h3> La sécurité</h3><p>Les principes cités plus haut empêchent une variable d'être utilisée à la fois en écriture dans deux threads. Cela empêche tout data-race, UB, null-pointer ou modification intra boucle (La modification d'une liste en cours de for-each). En effet, les objets en rust ne peuvent avoir plus d'une référence mutable à la fois. <br>Le système d'erreur de Rust est un autre rempart contre les erreurs, l'utilisation d'<code>Option&lt;T&gt;</code> et de <code>Result&lt;T,E&gt;</code> empêche tout pointeur ou valeur nulle. Ayant développé en Java, JS et C un paquet d'années maintenant je sais combien c'est fréquent.<br>En rust si un programme se compile et que on utilise pas de unsafe il est garantit de ne pas être sujet à aucune erreur !</p><h3> L'écosystème</h3><p>Grâce a Cargo, Rustup et crates.io rust est d'une simplicité de gestion au niveau des dépendances et projets déconcertante. <br>De plus, le grand nombre de développeurs Rust et leur mentalité ouverte et dans l'entraide est très agréable.</p><h3> La syntaxe et le typage</h3><p>Le typage est Rust est incroyable: statique, fort avec une inférence puissante, des traits, des enums et le pattern-matching.<br>La syntaxe est un autre aspect important important de ce langage en effet tout dans ce langage est une expression ainsi il est possible d'écrire:</p><pre><code class="lang-rust">let mut m = 0;
+let o = loop {
+    if m &lt; 10 {
+        break m;
+    }
+    m += 2;
+};
+let k = if a == 0 {
+    let m = std::fs::read_to_string("fichier1.txt").unwrap();
+    m += m.len();
+    m
+} else {
+    std::fs::read_to_string("fichier2.txt").unwrap()
+}
+</code></pre><br><p>Ma fonctionnalité préférée de ce langage reste les itérateurs empruntés à la programmation fonctionnelle qui sont d'une rapidité et d'une puissance folle.Ils peuvent en effet auto-vectoriser le code et pré-calculer les <i>bound-checks</i>, ils sont donc encore plus rapides sur les processeurs disposant de SIMD (<i>Single Instruction Multiple Data</i>) comme SSE chez Intel et AMD, NEON chez les processeur ARMv732/64 ou bien les extensions de vectorisation comme AVX ou AVX2</p><pre><code class="lang-rust">// On calcule la somme des racines des entiers de 0 a 50
+(0..50).filter(|x| x % 2 == 0).map(u32::sqrt).sum::&lt;f32&gt;()
+</code></pre>
+      </div>
+    </div>
+    <footer class="content">
+      <div class="container">
+        Ce site a été fait avec ❤ en Rust, SASS et HTML. Tous droits réservés Laurent Gaucheron 2021.
+      </div>
+    </footer>
+  </body>
+  <script>hljs.highlightAll();</script>
+</html>

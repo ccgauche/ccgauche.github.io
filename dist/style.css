@@ -1,0 +1,169 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+Pro&display=swap");
+@font-face {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://stackedit.io/static/fonts/lato-normal.27bd77b.woff) format("woff");
+}
+@font-face {
+  font-family: Lato;
+  font-style: italic;
+  font-weight: 400;
+  src: url(https://stackedit.io/static/fonts/lato-normal-italic.f28f2d6.woff) format("woff");
+}
+@font-face {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 600;
+  src: url(https://stackedit.io/static/fonts/lato-black.f80bda6.woff) format("woff");
+}
+@font-face {
+  font-family: Lato;
+  font-style: italic;
+  font-weight: 600;
+  src: url(https://stackedit.io/static/fonts/lato-black-italic.798eafd.woff) format("woff");
+}
+* {
+  font-family: Lato, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+a {
+  color: #0c93e4;
+  text-decoration: underline;
+}
+a:hover {
+  text-decoration: none;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+body {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+body > div {
+  flex-grow: 1;
+}
+
+footer {
+  background-color: #3d3d3d;
+  padding: 1rem;
+  color: #FFF !important;
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  justify-content: space-around;
+  color: rgba(0, 0, 0, 0.75);
+  font-variant-ligatures: common-ligatures;
+  line-height: 1.67;
+  -webkit-font-smoothing: antialiased;
+  font-size: 17px;
+}
+.content p > code, .content h1 > code, .content h2 > code, .content h3 > code, .content h4 > code, .content h5 > code, .content a > code, .content strong > code, .content i > code {
+  padding: 0rem 0.2rem;
+  background-color: #0001;
+  border-radius: 2px;
+}
+.content pre {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.content blockquote {
+  color: rgba(0, 0, 0, 0.5);
+  padding-left: 1.5em;
+  border-left: 5px solid rgba(0, 0, 0, 0.1);
+  margin: 1.2em 0;
+  box-sizing: border-box;
+}
+.content strong {
+  font-weight: 700;
+  line-height: 1.67;
+}
+.content p {
+  line-height: 1.67;
+}
+.content h1, .content h2 {
+  border-bottom: solid 1px #0002;
+}
+.content .container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0rem 1rem;
+}
+@media (min-width: 576px) and (max-width: 768px) {
+  .content .container {
+    width: 500px;
+  }
+  .content .container img {
+    max-width: 500px;
+  }
+}
+@media (min-width: 768px) and (max-width: 992px) {
+  .content .container {
+    width: 600px;
+  }
+  .content .container img {
+    max-width: 600px;
+  }
+}
+@media (min-width: 992px) and (max-width: 1200px) {
+  .content .container {
+    width: 800px;
+  }
+  .content .container img {
+    max-width: 800px;
+  }
+}
+@media (min-width: 1200px) {
+  .content .container {
+    width: 900px;
+  }
+  .content .container img {
+    max-width: 900px;
+  }
+}
+
+header.content {
+  background-color: #3d3d3d;
+  color: #FFF;
+}
+header.content > div.container {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 0;
+}
+header.content > div.container a {
+  padding: 1rem 1rem;
+  cursor: pointer;
+  color: #FFF;
+  text-decoration: none;
+}
+header.content > div.container a:hover, header.content > div.container a.active {
+  background-color: #242424;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: "Source Serif Pro", serif;
+}
+
+h1 {
+  font-size: 2.25em;
+}
+
+h2 {
+  font-size: 1.75em;
+}
+
+h3 {
+  font-size: 1.25em;
+}
