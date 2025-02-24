@@ -28,14 +28,14 @@
           CTF</strong> un challenge de rétro-ingénierie et de hacking. Avec le temps CVM devint de plus en plus poussé,
         un backend vers C fut créé, puis un optimiseur de bytecode... <br><br>Aujourd'hui CVM c'est 27K lignes de code
         Rust, un langage puissant avec des types statiques, de l'héritage, du polymorphisme, des abstractions
-        sûres... De multiples backend, en effet, le bytecode CVM se transpile vers Python, JS, Java, C et Rust (D'autres
+        sûres... De multiples backends, en effet, le bytecode CVM se transpile vers Python, JS, Java, C et Rust (D'autres
         langages sont en préparation).</p><br>
       <h2> Les contraintes de CVM</h2>
       <p>Le défi de CVM c'est qu'il n'existe que 9 instructions (si on compte toutes les opérations arithmétiques de
         base dans une seule instruction). Si on décide de compter chaque type d'opération comme une instruction il y a
         18 instructions.<br>Le plus gros défi est l'absence d'allocation mémoire. En effet, CVM ne dispose d'aucune
         manière de stocker de la mémoire sur une pile ou une heap. Tout est statique et géré à la compilation. Cela a
-        plusieurs conséquences: Il est impossible de faire des fonctions récursives, L'allocation d'objets qui dépassent
+        plusieurs conséquences: Il est impossible de faire des fonctions récursives, l'allocation d'objets qui dépassent
         de la taille d'un registre (256 blocs de 8 bits) est impossible sans avoir à gérer plusieurs registres.</p><br>
       <h2> L'optimiseur</h2>
       <p>CVM a un cycle de compilation relativement simple: </p>
@@ -45,7 +45,7 @@
         <li> Génération de code MIR</li>
         <li> Optimisation de ce code</li>
         <li> Génération de LIR ou de tout autre backend basé sur le MIR</li>
-        <li> Génération de tous les backends basé sur le LIR</li>
+        <li> Génération de tous les backends basés sur le LIR</li>
       </ul><br>
       <p>Voici une représentation textuelle du code intermédiaire CVM (MIR):</p>
       <pre><code class="lang-ruby">v0 = 6
