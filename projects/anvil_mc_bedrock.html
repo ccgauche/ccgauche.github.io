@@ -1,25 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laurent Gaucheron blog</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" href="../dist/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atom-one-dark.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/rust.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/css.min.js"></script>
-  </head>
-  <body> 
+</head>
+
+<body>
     <header class="content">
-      <div class="container"><a href="../index.html">Accueil</a><a href="../about.html">À propos</a><a href="../contact.html">Me contacter</a></div>
+        <div class="container"><a href="../index.html">Accueil</a><a href="../about.html">À propos</a><a
+                href="../contact.html">Me contacter</a></div>
     </header>
     <div class="content">
-      <div class="container">
-        <h1> Anvil MC Bedrock</h1><h2> Motivation</h2><p>Bien qu'il existe un serveur officiel Minecraft Bedrock Edition il est lent, gourmant en mémoire et pas extensible. C'est pour cela que j'ai choisi Rust, un langage performant, sûr et massivement parallélisable pour programmer cette implémentation qui se veut performante et adaptée aux processeurs modernes. C'était un gros bémol de MCBE qui est maintenant comblé.</p><h2> Comment obtenir les spécifications du protocole</h2><p>J'ai commencé par annalyser les requêtes envoyés par le client et le serveur officiel. J'ai tout de suite remarqué que le protocol était basé sur un fork de raknet. J'ai donc cherché des implémentations de raknet en rust mais j'en n'en n'ai trouvé aucune. J'ai donc du l'implémenter moi même. </p><h2> Le principe de la runtime tokio</h2><p>Tokio est la runtime asynchrone la plus populaire en Rust. Si vous ne savez pas ce qu'est une runtime asynchrone laissez moi vous rappeler le principe.<br>Une runtime asynchrone est un gestionnaire de regroupement de thread appelé thread-pool capable de gérer l'execution de tâches en parallèle. Si vous avez déja fait du Go vous êtes probablement familiarisés avec le principe de Green Thread. Et bien une runtime en rust utilise le même principe, elles permettent de créer des threads sans surcoûts pour de petites tâches.<br>C'est une des raisons qui font de rust un excellent langage pour le réseau et la gestion de systèmes critiques. Par exemple, CloudFlare utilise Rust avec Actix pour tous ses serveurs. Actix est un framework HTTP basé sur Tokio qui a l'avantage d'être sécurisé et le framework le plus rapide d'après TechEmpower <a href="https://www.techempower.com/benchmarks/#section=data-r18&hw=cl&test=composite">https://www.techempower.com/benchmarks/#section=data-r18&hw=cl&test=composite</a>.<br>Cette runtime permet avec une simplicité déconcertante de créer des threads "jetables".</p><pre><code class="lang-rust">// Cette macro procédurable permet a Tokio de gérer et synchroniser le main dans la runtime
+        <div class="container">
+            <h1> Anvil MC Bedrock</h1>
+            <h2> Motivation</h2>
+            <p>Bien qu'il existe un serveur officiel Minecraft Bedrock Edition il est lent, gourmant en mémoire et pas
+                extensible. C'est pour cela que j'ai choisi Rust, un langage performant, sûr et massivement
+                parallélisable pour programmer cette implémentation qui se veut performante et adaptée aux processeurs
+                modernes. C'était un gros bémol de MCBE qui est maintenant comblé.</p>
+            <h2> Comment obtenir les spécifications du protocole</h2>
+            <p>J'ai commencé par annalyser les requêtes envoyés par le client et le serveur officiel. J'ai tout de suite
+                remarqué que le protocol était basé sur un fork de raknet. J'ai donc cherché des implémentations de
+                raknet en rust mais j'en n'en n'ai trouvé aucune. J'ai donc du l'implémenter moi même. </p>
+            <h2> Le principe de la runtime tokio</h2>
+            <p>Tokio est la runtime asynchrone la plus populaire en Rust. Si vous ne savez pas ce qu'est une runtime
+                asynchrone laissez moi vous rappeler le principe.<br>Une runtime asynchrone est un gestionnaire de
+                regroupement de thread appelé thread-pool capable de gérer l'execution de tâches en parallèle. Si vous
+                avez déja fait du Go vous êtes probablement familiarisés avec le principe de Green Thread. Et bien une
+                runtime en rust utilise le même principe, elles permettent de créer des threads sans surcoûts pour de
+                petites tâches.<br>C'est une des raisons qui font de rust un excellent langage pour le réseau et la
+                gestion de systèmes critiques. Par exemple, CloudFlare utilise Rust avec Actix pour tous ses serveurs.
+                Actix est un framework HTTP basé sur Tokio qui a l'avantage d'être sécurisé et le framework le plus
+                rapide d'après TechEmpower <a
+                    href="https://www.techempower.com/benchmarks/#section=data-r18&hw=cl&test=composite">https://www.techempower.com/benchmarks/#section=data-r18&hw=cl&test=composite</a>.<br>Cette
+                runtime permet avec une simplicité déconcertante de créer des threads "jetables".</p>
+            <pre><code class="lang-rust">// Cette macro procédurable permet a Tokio de gérer et synchroniser le main dans la runtime
 #[tokio::main]
 async fn main() {
     // On créé un Green Thread
@@ -28,9 +54,16 @@ async fn main() {
         // Si vous êtes familiers avec JS ou Go les async, yield et await sont les mêmes ici.
     });
 }
-</code></pre><p>Elle supporte aussi une implémentation de nombreux protocoles réseau comme UDP ou TCP optimisés pour la pipeline tokio.</p><h2> Le serveur UDP Pricipal + les canaux</h2><p>Pour créer un socket UDP avec Tokio:</p><pre><code class="lang-rust">// On ouvre un socket UDP en 0.0.0.0:19312
+</code></pre>
+            <p>Elle supporte aussi une implémentation de nombreux protocoles réseau comme UDP ou TCP optimisés pour la
+                pipeline tokio.</p>
+            <h2> Le serveur UDP Pricipal + les canaux</h2>
+            <p>Pour créer un socket UDP avec Tokio:</p>
+            <pre><code class="lang-rust">// On ouvre un socket UDP en 0.0.0.0:19312
 let udp = UdpSocket::bind("0.0.0.0:19312".parse().expect("L'adresse IP est invalide")).await.expect("Impossible d'ouvrir un serveur a l'adresse");
-</code></pre><p>Pour gérer la reception d'un paquet </p><pre><code class="lang-rust">loop {
+</code></pre>
+            <p>Pour gérer la reception d'un paquet </p>
+            <pre><code class="lang-rust">loop {
     let mut buffer = vec![0; 1024*128];
     let (size, peer) = udp.recv_from(&mut buffer);
     tokio::spawn(async {
@@ -40,7 +73,15 @@ let udp = UdpSocket::bind("0.0.0.0:19312".parse().expect("L'adresse IP est inval
         // On gère de décodage du paquet ici
     });
 }
-</code></pre><p>Une autre approche au problème et de créer des micro-services communiquants entre eux avec des canaux. La STD de rust fournit une solution appellée <a href="https://doc.rust-lang.org/nightly/std/sync/mpsc/index.html">mspc</a> néanmoins <a href="https://docs.rs/crossbeam-channel/0.5.1/crossbeam_channel/">crossbeam-channel</a> est fréquemment utilisé car plus performant et pratique.<br>On pourait aussi utiliser un système hybride: Par exemple gérer toutes les nouvelles connexions dans un green thread et avoir un service qui s'occupe d'actualiser le monde. La communication entre les deux pourrait se faire a l'aide d'un canal. </p><pre><code class="lang-rust">struct World {
+</code></pre>
+            <p>Une autre approche au problème et de créer des micro-services communiquants entre eux avec des canaux. La
+                STD de rust fournit une solution appellée <a
+                    href="https://doc.rust-lang.org/nightly/std/sync/mpsc/index.html">mspc</a> néanmoins <a
+                    href="https://docs.rs/crossbeam-channel/0.5.1/crossbeam_channel/">crossbeam-channel</a> est
+                fréquemment utilisé car plus performant et pratique.<br>On pourait aussi utiliser un système hybride:
+                Par exemple gérer toutes les nouvelles connexions dans un green thread et avoir un service qui s'occupe
+                d'actualiser le monde. La communication entre les deux pourrait se faire a l'aide d'un canal. </p>
+            <pre><code class="lang-rust">struct World {
     receiver: Receiver&lt;Modification&gt;,
     blocks: HashMap&lt;[u8; 3], u8&gt;
 }
@@ -100,14 +141,24 @@ fn handle_block_update_packet(mut iter: impl Iter&lt;Item = u8&gt;) -&gt; Option
         r#type: iter.next()?
     })
 }
-</code></pre><p><a href="https://github.com/AnvilMC/anvil_bedrock/blob/main/server/src/server/mod.rs">Lien de l'implémentation utilisé sur Anvil MC Bedrock</a><br><i>L'implémentation que j'utilise est légèrement différente</i> <br><br>Comme vous avez pu le voir c'est relativement facile de créer des architectures, sûres, performantes et robustes en Rust. Nous sommes de plus assurés qu'il ne peut pas y avoir de data-race ou de concurrent access exception comme Rust check tout a la compilation. Si une faille se trouve quelque part, le programme ne se compilera pas!</p><br><h2> Comparaison de performances entre le serveur officiel et Anvil MC Bedrock.</h2><p>Ici un graphique du temps par requête en ms.Benchmark réalisé sur un Ryzen 3600XT (6 cores, 12 threads, 4.5GHz)<br><img src="https://i.imgur.com/UHIY9nm.png" label="Bench"></p>
-      </div>
+</code></pre>
+            <p><a href="https://github.com/AnvilMC/anvil_bedrock/blob/main/server/src/server/mod.rs">Lien de
+                    l'implémentation utilisé sur Anvil MC Bedrock</a><br><i>L'implémentation que j'utilise est
+                    légèrement différente</i> <br><br>Comme vous avez pu le voir c'est relativement facile de créer des
+                architectures, sûres, performantes et robustes en Rust. Nous sommes de plus assurés qu'il ne peut pas y
+                avoir de data-race ou de concurrent access exception comme Rust check tout a la compilation. Si une
+                faille se trouve quelque part, le programme ne se compilera pas!</p><br>
+            <h2> Comparaison de performances entre le serveur officiel et Anvil MC Bedrock.</h2>
+            <p>Ici un graphique du temps par requête en ms.Benchmark réalisé sur un Ryzen 3600XT (6 cores, 12 threads,
+                4.5GHz)<br><img src="https://i.imgur.com/UHIY9nm.png" label="Bench"></p>
+        </div>
     </div>
     <footer class="content">
-      <div class="container">
-        Ce site a été fait avec ❤ en Rust, SASS et HTML. Tous droits réservés Laurent Gaucheron 2021.
-      </div>
+        <div class="container">
+            Ce site a été fait avec ❤ en Rust, SASS et HTML. Tous droits réservés Laurent Gaucheron 2021 - 2025.
+        </div>
     </footer>
-  </body>
-  <script>hljs.highlightAll();</script>
+</body>
+<script>hljs.highlightAll();</script>
+
 </html>

@@ -1,25 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laurent Gaucheron blog</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-    <link rel="stylesheet" href="../dist/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atom-one-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/rust.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/css.min.js"></script>
-  </head>
-  <body> 
-    <header class="content">
-      <div class="container"><a href="../index.html">Accueil</a><a href="../about.html">À propos</a><a href="../contact.html">Me contacter</a></div>
-    </header>
-    <div class="content">
-      <div class="container">
-        <h1> CVM v2 1.0.2 maintenant en public</h1><h2> Qu'est ce que CVM</h2><p>CVM était au départ une petite machine virtuelle, ainsi qu'un compileur réalisé pour <strong>Discursif CTF</strong> un challenge de rétro-ingénierie et de hacking.Avec le temps CVM devint de plus en plus poussé, un backend vers C fut créé, puis un optimiseur de bytecode...<br><br>Aujourd'hui CVM c'est 27K lignes de code Rust, un language puissant avec des types statiques, de l'héritage, du polymorphisme, des abstractions sûres...De multiples backend, en effet, le bytecode CVM se transpile vers Python, JS, Java, C et Rust (D'autres langages sont en préparation).</p><br><h2> Les contraintes de CVM</h2><p>Le défi de CVM c'est qu'il n'existe que 9 instructions (si un compte toutes les opérations arithmétiques de base dans une seule instruction). Si on décide de compter chaque type d'opération comme une instruction il y a 18 instructions.<br>Le plus gros défi est l'absence d'allocation mémoire. En effet, CVM ne dispose d'aucune manière de stocker de la mémoire sur une pile ou une heap. Tout est statique et géré à la compilation.Cela a plusieurs conséquences: Il est impossible de faire des fonctions récursives, L'allocation d'objets qui dépassent de la taille d'un registre (256 blocs de 8 bits) est impossible sans avoir à gérer plusieurs registres.</p><br><h2> L'optimiseur</h2><p>CVM a un cycle de compilation relativement simple: </p><ul><li> Parsing</li><li> Type checking</li><li> Génération de code MIR</li><li> Optimisation de ce code</li><li> Génération de LIR ou de tout autre backend basé sur le MIR</li><li> Génération de tous les backends basé sur le LIR</li></ul><br><p>Voici une représentation textuelle du code intermédiaire CVM (MIR):</p><pre><code class="lang-ruby">v0 = 6
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laurent Gaucheron blog</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="stylesheet" href="../dist/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/rust.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/languages/css.min.js"></script>
+</head>
+
+<body>
+  <header class="content">
+    <div class="container"><a href="../index.html">Accueil</a><a href="../about.html">À propos</a><a
+        href="../contact.html">Me contacter</a></div>
+  </header>
+  <div class="content">
+    <div class="container">
+      <h1> CVM v2 1.0.2 maintenant en public</h1>
+      <h2> Qu'est ce que CVM</h2>
+      <p>CVM était au départ une petite machine virtuelle, ainsi qu'un compileur réalisé pour <strong>Discursif
+          CTF</strong> un challenge de rétro-ingénierie et de hacking. Avec le temps CVM devint de plus en plus poussé,
+        un backend vers C fut créé, puis un optimiseur de bytecode... <br><br>Aujourd'hui CVM c'est 27K lignes de code
+        Rust, un language puissant avec des types statiques, de l'héritage, du polymorphisme, des abstractions
+        sûres... De multiples backend, en effet, le bytecode CVM se transpile vers Python, JS, Java, C et Rust (D'autres
+        langages sont en préparation).</p><br>
+      <h2> Les contraintes de CVM</h2>
+      <p>Le défi de CVM c'est qu'il n'existe que 9 instructions (si un compte toutes les opérations arithmétiques de
+        base dans une seule instruction). Si on décide de compter chaque type d'opération comme une instruction il y a
+        18 instructions.<br>Le plus gros défi est l'absence d'allocation mémoire. En effet, CVM ne dispose d'aucune
+        manière de stocker de la mémoire sur une pile ou une heap. Tout est statique et géré à la compilation. Cela a
+        plusieurs conséquences: Il est impossible de faire des fonctions récursives, L'allocation d'objets qui dépassent
+        de la taille d'un registre (256 blocs de 8 bits) est impossible sans avoir à gérer plusieurs registres.</p><br>
+      <h2> L'optimiseur</h2>
+      <p>CVM a un cycle de compilation relativement simple: </p>
+      <ul>
+        <li> Parsing</li>
+        <li> Type checking</li>
+        <li> Génération de code MIR</li>
+        <li> Optimisation de ce code</li>
+        <li> Génération de LIR ou de tout autre backend basé sur le MIR</li>
+        <li> Génération de tous les backends basé sur le LIR</li>
+      </ul><br>
+      <p>Voici une représentation textuelle du code intermédiaire CVM (MIR):</p>
+      <pre><code class="lang-ruby">v0 = 6
 v1 = 73 110 118 97 108 105 100 32 105 110 112 117 116 10
 v2 = 79
 v3 = 49
@@ -240,7 +269,9 @@ loop {
   }
 }
 end
-</code></pre><p>Ci-dessous le code d'un morpion en CVM.</p><pre><code class="lang-rust">use "../lib/std";
+</code></pre>
+      <p>Ci-dessous le code d'un morpion en CVM.</p>
+      <pre><code class="lang-rust">use "../lib/std";
 
 type Table = 9 {
     ref empty = "         ";
@@ -321,7 +352,11 @@ fn main() {
         else =&gt; current = "O";
     }
 }
-</code></pre><br><p>Le code que vous avez pu voir avant est intimidant, pourtant il était déja optimisé et simplifié!<br>Pour comprendre la puissance de l'optimiseur, je vous propose de voir ce que donne le programme suivant optimisé et non-optimisé</p><pre><code class="lang-rust">use "../lib/std";
+</code></pre><br>
+      <p>Le code que vous avez pu voir avant est intimidant, pourtant il était déja optimisé et simplifié!<br>Pour
+        comprendre la puissance de l'optimiseur, je vous propose de voir ce que donne le programme suivant optimisé et
+        non-optimisé</p>
+      <pre><code class="lang-rust">use "../lib/std";
 
 fn main() {
     // On demande le nom de l'utilisateur
@@ -335,7 +370,9 @@ fn main() {
     // Comme vous pouvez le voir les blocs de code en CVM peuvent s'il ne contiennent qu'une instruction
     // s'écrire avec un =&gt;
 }
-</code></pre><br><p>Une fois optimisé voilà le résultat:</p><pre><code class="lang-ruby">v0 = 76 97 117 114 101 110 116
+</code></pre><br>
+      <p>Une fois optimisé voilà le résultat:</p>
+      <pre><code class="lang-ruby">v0 = 76 97 117 114 101 110 116
 v1 = 10
 v2 = 0
 v3 = 32
@@ -373,7 +410,9 @@ loop {
   v20 = v19 - v4
   v7 = v7[v4 &gt; v20]
 }
-</code></pre><br><p>Mais quand il n'est pas optimisé c'est autre chose!</p><pre><code class="lang-ruby">v1 = fn {
+</code></pre><br>
+      <p>Mais quand il n'est pas optimisé c'est autre chose!</p>
+      <pre><code class="lang-ruby">v1 = fn {
   v2 = 69 110 116 101 114 32 121 111 117 114 32 110 97 109 101 58 32
   v3 = fn {
     print v2
@@ -572,7 +611,27 @@ loop {
   }
 }
 end
-</code></pre><br><p>Comme vous avez pu le constaté l'optimiseur est très efficace!<br>Pour atteindre cette efficacité l'optimisation est découpé en passes qui s'éxécutent jusqu'à qu'aucune modification n'est été apporté au code par la dernière passe. Chaque passe va executer a son tour les optimisations suivants: </p><ul><li> l'élision de code statique</li><li> le rassemblement d'appels consécutifs</li><li> le simplifieur de branche</li><li> le reformatteur de fonction</li><li> le nettoyeur de boucle</li><li> l'élision du code innutile</li><li> la fusion de code</li><li> le rassemblement de constante</li><li> le pré-calcul à la compilation</li><li> le nettoyage de référence</li></ul><p>Le bytecode CVM final n'ayant aucun concept de fonction ou de boucle ils sont tous remplacés par des JUMP et des MOV. Si les JUMPs ne sont pas dans le MIR c'est que c'est beaucoup plus dur d'optimiser un code utilisant des branches avec des JUMPs. En effet, la différenciation des boucles et des simples conditions est assez difficile.<br>Le code LIR généré par le programme ci dessus est celui ci:</p><pre><code class="lang-rust">l0 v0 = 0
+</code></pre><br>
+      <p>Comme vous avez pu le constaté l'optimiseur est très efficace!<br>Pour atteindre cette efficacité
+        l'optimisation est découpé en passes qui s'éxécutent jusqu'à qu'aucune modification n'est été apporté au code
+        par la dernière passe. Chaque passe va executer a son tour les optimisations suivants: </p>
+      <ul>
+        <li> l'élision de code statique</li>
+        <li> le rassemblement d'appels consécutifs</li>
+        <li> le simplifieur de branche</li>
+        <li> le reformatteur de fonction</li>
+        <li> le nettoyeur de boucle</li>
+        <li> l'élision du code innutile</li>
+        <li> la fusion de code</li>
+        <li> le rassemblement de constante</li>
+        <li> le pré-calcul à la compilation</li>
+        <li> le nettoyage de référence</li>
+      </ul>
+      <p>Le bytecode CVM final n'ayant aucun concept de fonction ou de boucle ils sont tous remplacés par des JUMP et
+        des MOV. Si les JUMPs ne sont pas dans le MIR c'est que c'est beaucoup plus dur d'optimiser un code utilisant
+        des branches avec des JUMPs. En effet, la différenciation des boucles et des simples conditions est assez
+        difficile.<br>Le code LIR généré par le programme ci dessus est celui ci:</p>
+      <pre><code class="lang-rust">l0 v0 = 0
 l1 v1 = 72 101 108 108 111 32
 l2 v2 = 69 110 116 101 114 32 121 111 117 114 32 110 97 109 101 58 32
 l3 v3 = 32
@@ -616,7 +675,16 @@ l40 v20 = v19 - v4
 l41 v7 = v7[v4 &gt; v20]
 l42 goto 'loop_start1
 l43 'loop_end1
-</code></pre><br><p>Cet ASM est très compact une fois en format executable CVM, il fait, en effet, 164 octets.</p><br><h2> La documentation CVM</h2><p>CVM dipose d'un typage statique ce qui permet une bonne analyse du code et une auto génération des documentations. Voici une capture d'écran de la documentation! <img src="https://i.imgur.com/jk6LJnX.png" label="Image de la documentation"><br>Cette documentation est auto-générée à la compilation si l'export <code>Doc</code> est activé</p><br><h2> Les exports</h2><br><p>CVM peut se compiler pour diverses plateformes. Par exemple le code ci dessus, donne en C:</p><pre><code class="lang-c">#include &lt;stdio.h&gt;
+</code></pre><br>
+      <p>Cet ASM est très compact une fois en format executable CVM, il fait, en effet, 164 octets.</p><br>
+      <h2> La documentation CVM</h2>
+      <p>CVM dipose d'un typage statique ce qui permet une bonne analyse du code et une auto génération des
+        documentations. Voici une capture d'écran de la documentation! <img src="https://i.imgur.com/jk6LJnX.png"
+          label="Image de la documentation"><br>Cette documentation est auto-générée à la compilation si l'export
+        <code>Doc</code> est activé</p><br>
+      <h2> Les exports</h2><br>
+      <p>CVM peut se compiler pour diverses plateformes. Par exemple le code ci dessus, donne en C:</p>
+      <pre><code class="lang-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 
@@ -722,7 +790,43 @@ void main() {
         memcpy(v7 + 1, v7 + v4[1] + 1, v7[0]);
     }
 }
-</code></pre><p>Comme vous pouvez le voir le code C généré est assez "brut" mais le compileur le C est extrèmement bon et arrive aisément à élider la majorité des <strong>memcpy</strong>. Toutefois le code reste extrèmement illisible notament dans Ghidra où le code est tellement étrange qu'il n'arrive plus à rien inférer.<br>Ce langage a donc un potentiel dans la programmation de trojans, virus... En effet, sa mémoire étant statique, ses performances prévisibles et son code est extrèmement difficile a rétro-ingéniérer il est presque impossible pour un antivirus de le détecter. <br>D'autres backend sont selon moi plus intéréssant notamment celui en JS ou python car ils produisent un code vraiment illisible et cela forme une offuscation puissante pour des langages interprétés ou compilés à la volée comme JS ou Python.</p><br><h2> Pourquoi avoir choisi Rust</h2><p>Rust est un langage développé par Mozilla Foundation, l'organisation à but non-lucratif derrière Firefox. Ce langage a comme principes fondateurs:</p><h3> La performance</h3><p>Rust n'utilise pas de garbage collector, toute la mémoire est gérée statiquement à la compilation grace à trois principes: </p><ul><li> les lifetimes ou durée de vie</li><li> l'ownership ou propriété</li><li> le borrowing ou empreint.</li></ul><br><h3> La sécurité</h3><p>Les principes cités plus haut empêchent une variable d'être utilisée à la fois en écriture dans deux threads. Cela empêche tout data-race, UB, null-pointer ou modification intra boucle (La modification d'une liste en cours de for-each). En effet, les objets en rust ne peuvent avoir plus d'une référence mutable à la fois. <br>Le système d'erreur de Rust est un autre rempart contre les erreurs, l'utilisation d'<code>Option&lt;T&gt;</code> et de <code>Result&lt;T,E&gt;</code> empêche tout pointeur ou valeur nulle. Ayant développé en Java, JS et C un paquet d'années maintenant je sais combien c'est fréquent.<br>En rust si un programme se compile et que on utilise pas de unsafe il est garantit de ne pas être sujet à aucune erreur !</p><h3> L'écosystème</h3><p>Grâce a Cargo, Rustup et crates.io rust est d'une simplicité de gestion au niveau des dépendances et projets déconcertante. <br>De plus, le grand nombre de développeurs Rust et leur mentalité ouverte et dans l'entraide est très agréable.</p><h3> La syntaxe et le typage</h3><p>Le typage est Rust est incroyable: statique, fort avec une inférence puissante, des traits, des enums et le pattern-matching.<br>La syntaxe est un autre aspect important important de ce langage en effet tout dans ce langage est une expression ainsi il est possible d'écrire:</p><pre><code class="lang-rust">let mut m = 0;
+</code></pre>
+      <p>Comme vous pouvez le voir le code C généré est assez "brut" mais le compileur le C est extrèmement bon et
+        arrive aisément à élider la majorité des <strong>memcpy</strong>. Toutefois le code reste extrèmement illisible
+        notament dans Ghidra où le code est tellement étrange qu'il n'arrive plus à rien inférer.<br>Ce langage a donc
+        un potentiel dans la programmation de trojans, virus... En effet, sa mémoire étant statique, ses performances
+        prévisibles et son code est extrèmement difficile a rétro-ingéniérer il est presque impossible pour un antivirus
+        de le détecter. <br>D'autres backend sont selon moi plus intéréssant notamment celui en JS ou python car ils
+        produisent un code vraiment illisible et cela forme une offuscation puissante pour des langages interprétés ou
+        compilés à la volée comme JS ou Python.</p><br>
+      <h2> Pourquoi avoir choisi Rust</h2>
+      <p>Rust est un langage développé par Mozilla Foundation, l'organisation à but non-lucratif derrière Firefox. Ce
+        langage a comme principes fondateurs:</p>
+      <h3> La performance</h3>
+      <p>Rust n'utilise pas de garbage collector, toute la mémoire est gérée statiquement à la compilation grace à trois
+        principes: </p>
+      <ul>
+        <li> les lifetimes ou durée de vie</li>
+        <li> l'ownership ou propriété</li>
+        <li> le borrowing ou empreint.</li>
+      </ul><br>
+      <h3> La sécurité</h3>
+      <p>Les principes cités plus haut empêchent une variable d'être utilisée à la fois en écriture dans deux threads.
+        Cela empêche tout data-race, UB, null-pointer ou modification intra boucle (La modification d'une liste en cours
+        de for-each). En effet, les objets en rust ne peuvent avoir plus d'une référence mutable à la fois. <br>Le
+        système d'erreur de Rust est un autre rempart contre les erreurs, l'utilisation d'<code>Option&lt;T&gt;</code>
+        et de <code>Result&lt;T,E&gt;</code> empêche tout pointeur ou valeur nulle. Ayant développé en Java, JS et C un
+        paquet d'années maintenant je sais combien c'est fréquent.<br>En rust si un programme se compile et que on
+        utilise pas de unsafe il est garantit de ne pas être sujet à aucune erreur !</p>
+      <h3> L'écosystème</h3>
+      <p>Grâce a Cargo, Rustup et crates.io rust est d'une simplicité de gestion au niveau des dépendances et projets
+        déconcertante. <br>De plus, le grand nombre de développeurs Rust et leur mentalité ouverte et dans l'entraide
+        est très agréable.</p>
+      <h3> La syntaxe et le typage</h3>
+      <p>Le typage est Rust est incroyable: statique, fort avec une inférence puissante, des traits, des enums et le
+        pattern-matching.<br>La syntaxe est un autre aspect important important de ce langage en effet tout dans ce
+        langage est une expression ainsi il est possible d'écrire:</p>
+      <pre><code class="lang-rust">let mut m = 0;
 let o = loop {
     if m &lt; 10 {
         break m;
@@ -736,16 +840,23 @@ let k = if a == 0 {
 } else {
     std::fs::read_to_string("fichier2.txt").unwrap()
 }
-</code></pre><br><p>Ma fonctionnalité préférée de ce langage reste les itérateurs empruntés à la programmation fonctionnelle qui sont d'une rapidité et d'une puissance folle.Ils peuvent en effet auto-vectoriser le code et pré-calculer les <i>bound-checks</i>, ils sont donc encore plus rapides sur les processeurs disposant de SIMD (<i>Single Instruction Multiple Data</i>) comme SSE chez Intel et AMD, NEON chez les processeur ARMv732/64 ou bien les extensions de vectorisation comme AVX ou AVX2</p><pre><code class="lang-rust">// On calcule la somme des racines des entiers de 0 a 50
+</code></pre><br>
+      <p>Ma fonctionnalité préférée de ce langage reste les itérateurs empruntés à la programmation fonctionnelle qui
+        sont d'une rapidité et d'une puissance folle.Ils peuvent en effet auto-vectoriser le code et pré-calculer les
+        <i>bound-checks</i>, ils sont donc encore plus rapides sur les processeurs disposant de SIMD (<i>Single
+          Instruction Multiple Data</i>) comme SSE chez Intel et AMD, NEON chez les processeur ARMv732/64 ou bien les
+        extensions de vectorisation comme AVX ou AVX2</p>
+      <pre><code class="lang-rust">// On calcule la somme des racines des entiers de 0 a 50
 (0..50).filter(|x| x % 2 == 0).map(u32::sqrt).sum::&lt;f32&gt;()
 </code></pre>
-      </div>
     </div>
-    <footer class="content">
-      <div class="container">
-        Ce site a été fait avec ❤ en Rust, SASS et HTML. Tous droits réservés Laurent Gaucheron 2021.
-      </div>
-    </footer>
-  </body>
-  <script>hljs.highlightAll();</script>
+  </div>
+  <footer class="content">
+    <div class="container">
+      Ce site a été fait avec ❤ en Rust, SASS et HTML. Tous droits réservés Laurent Gaucheron 2021 - 2025.
+    </div>
+  </footer>
+</body>
+<script>hljs.highlightAll();</script>
+
 </html>
